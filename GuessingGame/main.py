@@ -3,7 +3,7 @@ from game_config import GameConfig
 from game import Game
 
 
-if __name__ == "__main__":
+def main() -> None:
     # Define game constants.
     MAX_GUESSES: int = 5
     MIN_NUMBER: int = 1
@@ -16,3 +16,7 @@ if __name__ == "__main__":
     # Start game.
     game: Game = Game(game_service)
     game.play()
+
+
+if __name__ == "__main__":
+    main()

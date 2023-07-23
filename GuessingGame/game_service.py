@@ -19,13 +19,13 @@ class GameService:
         self.remaining_guesses -= 1
 
     # Generates a random number within the given range.
-    def generate_number(self) -> None:
+    def generate_number(self) -> int:
         return random.randint(self.game_config.min_number, self.game_config.max_number)
 
     # Starts a new round of the guessing game.
     def play_round(self) -> None:
-        self.number_to_guess = self.generate_number()
         print(self.game_config.MESSAGE_INTRODUCTION)
+        self.number_to_guess = self.generate_number()
         self.remaining_guesses = self.game_config.max_guesses
 
         while not self.is_out_of_guesses():
@@ -44,9 +44,17 @@ class GameService:
     def get_user_guess(self) -> int:
         while True:
             try:
-                return int(input("Your guess: "))
+                user_input = int(input("Your guess: "))
+                if (
+                    self.game_config.min_number
+                    <= user_input
+                    <= self.game_config.max_number
+                ):
+                    return user_input
+                else:
+                    print("Your guess is not within the valid range: ")
             except ValueError:
-                print("Invalid input. Please enter a valid number.")
+                print("Invalid input. Please enter a valid number: ")
 
     # Provides feedback to the user based on their guess.
     def print_feedback(self, user_guess: int) -> None:
@@ -58,5 +66,12 @@ class GameService:
 
     # Asks the user if they want to play again.
     def ask_play_again(self) -> bool:
-        start_again = input("Do you want to play again? (Y/N): ")
-        return start_again.upper() == "Y"
+        while True:
+            start_again = input("Do you want to play again? (Y/N): ")
+            start_again = start_again.upper()
+            if start_again == "Y":
+                return True
+            elif start_again == "N":
+                return False
+            else:
+                print("Invalid input. Please enter 'Y' or 'N': ")
